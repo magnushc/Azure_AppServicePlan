@@ -2,6 +2,18 @@ on:
   workflow_dispatch:
 
 name: Azure storageAccount ARM
+inputs:
+  resourceGroupName:
+    description: "Provide the name of a resource group, only required for resource Group deployments."
+    required: false
+  subscriptionId:
+    description: "Override the Subscription Id set by Azure Login."
+    required: false 
+  creds:
+    description: "creds."
+    required: false
+  managementGroupId:
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -13,14 +25,14 @@ jobs:
       # Log into Azure
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: $INPUT_creds }}
 
       # Deploy ARM template
     - name: Run ARM deploy
       uses: azure/arm-deploy@v1
       with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ vars.AZURE_RESOURCE_GROUP }}
+        subscriptionId: $INPUT_subscriptionId
+        resourceGroupName: $INPUT_resourceGroupName
         template: ./armtemplates/storageaccount.json
         parameters: 
           storageAccountType=Standard_LRS
