@@ -12,7 +12,6 @@ inputs:
   creds:
     description: "creds."
     required: false
-  managementGroupId:
 
 jobs:
   build-and-deploy:
